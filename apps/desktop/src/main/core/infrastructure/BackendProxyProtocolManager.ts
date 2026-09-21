@@ -27,7 +27,7 @@ interface BackendProxyRemoteBaseOptions {
 
 /**
  * Holds per-session proxy context for routing renderer-originated backend
- * requests (`/trpc`, `/webapi`, `/api/auth`, `/market`) to the remote LobeHub
+ * requests (`/trpc`, `/webapi`, `/api`, `/market`) to the remote LobeHub
  * server. The context is consumed by `createAppRequestInterceptor`, which the
  * `app://` protocol manager invokes before its static / Vite fallback.
  */
@@ -199,7 +199,7 @@ export class BackendProxyProtocolManager {
 
   /**
    * Build an `app://` request interceptor that diverts backend-prefixed paths
-   * (trpc / webapi / api/auth / market) through `proxy()` against the default
+   * (trpc / webapi / api / market) through `proxy()` against the default
    * session. Plug into `RendererProtocolManager.addRequestInterceptor` so the
    * protocol manager doesn't need to know what "backend" means.
    *
