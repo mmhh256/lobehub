@@ -26,6 +26,7 @@ export {
 } from './PlaceholderVariables';
 export { ReactionFeedbackProcessor } from './ReactionFeedback';
 export {
+  cacheEconomicsForProvider,
   type StaleToolResultTrimConfig,
   StaleToolResultTrimProcessor,
 } from './StaleToolResultTrim';
