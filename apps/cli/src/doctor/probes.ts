@@ -1,7 +1,7 @@
 import { createLambdaClient, type TrpcClient } from '../api/client';
 import { resolveWorkspaceScope } from '../api/workspace';
 import { getUserIdFromApiKey } from '../auth/apiKey';
-import { getValidToken } from '../auth/refresh';
+import { describeTokenLookup, getValidToken } from '../auth/refresh';
 import type { AuthSourceKind } from '../auth/source';
 import { parseJwtPayload, pickAuthSource } from '../auth/source';
 import { resolveServerUrl } from '../settings';
@@ -91,12 +91,14 @@ export async function probeCredential(ctx: DoctorContext): Promise<CredentialPro
 
     if (source.kind === 'stored') {
       const refreshed = await getValidToken();
-      if (!refreshed)
+      if (refreshed.status !== 'ok')
         return {
           ...base,
-          error: source.token
-            ? 'the stored token has expired and could not be refreshed'
-            : 'no stored login on this machine',
+          error:
+            describeTokenLookup(refreshed) ??
+            (source.token
+              ? 'the stored token has expired and could not be refreshed'
+              : 'no stored login on this machine'),
         };
       const payload = parseJwtPayload(refreshed.credentials.accessToken);
       return {
